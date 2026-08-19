@@ -8,6 +8,8 @@ export default function CardModal({ card, onSave, onDelete, onClose }) {
   const [isVideo, setIsVideo] = useState(!!card?.videoUrl);
   const fileInputRef = useRef(null);
 
+  const hasMedia = imageUrl || videoUrl;
+
   const handleFile = (file) => {
     if (!file) return;
     const reader = new FileReader();
@@ -19,6 +21,10 @@ export default function CardModal({ card, onSave, onDelete, onClose }) {
       }
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleReplace = () => {
+    fileInputRef.current?.click();
   };
 
   const handleSave = () => {
@@ -45,8 +51,26 @@ export default function CardModal({ card, onSave, onDelete, onClose }) {
         {/* Upload Zone */}
         <div
           className="upload-zone"
-          onClick={() => !imageUrl && !videoUrl && fileInputRef.current?.click()}
+          style={{ cursor: 'pointer' }}
+          onClick={hasMedia ? handleReplace : () => fileInputRef.current?.click()}
         >
+          {/* Always-visible file input covering the whole zone */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept={isVideo ? 'video/*' : 'image/*'}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              opacity: 0,
+              cursor: 'pointer',
+              zIndex: 2,
+            }}
+            onChange={(e) => handleFile(e.target.files?.[0])}
+          />
+
           {isVideo ? (
             videoUrl ? (
               <video
@@ -55,6 +79,8 @@ export default function CardModal({ card, onSave, onDelete, onClose }) {
                 controls
                 muted
                 playsInline
+                style={{ zIndex: 1, cursor: 'pointer' }}
+                onClick={(e) => { e.stopPropagation(); }}
               />
             ) : (
               <div className="upload-zone-text">
@@ -65,7 +91,13 @@ export default function CardModal({ card, onSave, onDelete, onClose }) {
             )
           ) : (
             imageUrl ? (
-              <img className="upload-preview" src={imageUrl} alt="Preview" />
+              <img
+                className="upload-preview"
+                src={imageUrl}
+                alt="Preview"
+                style={{ zIndex: 1, cursor: 'pointer' }}
+                onClick={(e) => { e.stopPropagation(); }}
+              />
             ) : (
               <div className="upload-zone-text">
                 <span style={{ fontSize: '32px', display: 'block', marginBottom: '8px' }}>📷</span>
@@ -74,12 +106,6 @@ export default function CardModal({ card, onSave, onDelete, onClose }) {
               </div>
             )
           )}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept={isVideo ? 'video/*' : 'image/*'}
-            onChange={(e) => handleFile(e.target.files?.[0])}
-          />
         </div>
 
         {/* Video Toggle */}

@@ -80,7 +80,7 @@ body {
 
 /* ─── Quote Strip ─────────────────────────────────────────── */
 .quote-strip {
-  background: var(--quote-bg);
+  background: #1A4B8C;
   padding: 14px 28px 16px;
   text-align: center;
   cursor: pointer;
@@ -99,7 +99,7 @@ body {
   font-weight: 400;
   font-size: 14px;
   line-height: 1.5;
-  color: var(--text-primary);
+  color: #FFFFFF;
   transition: opacity 0.3s ease;
   max-width: 340px;
 }
@@ -111,7 +111,7 @@ body {
 .quote-author {
   font-family: var(--font-sans);
   font-size: 11px;
-  color: var(--text-secondary);
+  color: rgba(255,255,255,0.75);
   letter-spacing: 0.03em;
   transition: opacity 0.3s ease;
 }
@@ -126,8 +126,7 @@ body {
   top: 50%;
   transform: translateY(-50%);
   font-size: 10px;
-  color: var(--text-secondary);
-  opacity: 0.5;
+  color: rgba(255,255,255,0.5);
   font-family: var(--font-sans);
 }
 
@@ -458,6 +457,7 @@ body {
   overflow: hidden;
   position: relative;
   background: var(--card-bg);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .upload-zone:hover {
