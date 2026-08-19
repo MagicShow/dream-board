@@ -8,8 +8,6 @@ export default function CardModal({ card, onSave, onDelete, onClose }) {
   const [isVideo, setIsVideo] = useState(!!card?.videoUrl);
   const fileInputRef = useRef(null);
 
-  const hasMedia = imageUrl || videoUrl;
-
   const handleFile = (file) => {
     if (!file) return;
     const reader = new FileReader();
@@ -21,10 +19,6 @@ export default function CardModal({ card, onSave, onDelete, onClose }) {
       }
     };
     reader.readAsDataURL(file);
-  };
-
-  const handleReplace = () => {
-    fileInputRef.current?.click();
   };
 
   const handleSave = () => {
@@ -48,13 +42,9 @@ export default function CardModal({ card, onSave, onDelete, onClose }) {
           <button className="modal-close" onClick={onClose}>×</button>
         </div>
 
-        {/* Upload Zone */}
-        <div
-          className="upload-zone"
-          style={{ cursor: 'pointer' }}
-          onClick={hasMedia ? handleReplace : () => fileInputRef.current?.click()}
-        >
-          {/* Always-visible file input covering the whole zone */}
+        {/* Upload Zone — entire zone triggers file input */}
+        <div className="upload-zone" onClick={() => fileInputRef.current?.click()}>
+          {/* File input always on top, fully transparent, covers full zone */}
           <input
             ref={fileInputRef}
             type="file"
@@ -66,7 +56,7 @@ export default function CardModal({ card, onSave, onDelete, onClose }) {
               height: '100%',
               opacity: 0,
               cursor: 'pointer',
-              zIndex: 2,
+              zIndex: 10,
             }}
             onChange={(e) => handleFile(e.target.files?.[0])}
           />
@@ -79,8 +69,6 @@ export default function CardModal({ card, onSave, onDelete, onClose }) {
                 controls
                 muted
                 playsInline
-                style={{ zIndex: 1, cursor: 'pointer' }}
-                onClick={(e) => { e.stopPropagation(); }}
               />
             ) : (
               <div className="upload-zone-text">
@@ -91,13 +79,7 @@ export default function CardModal({ card, onSave, onDelete, onClose }) {
             )
           ) : (
             imageUrl ? (
-              <img
-                className="upload-preview"
-                src={imageUrl}
-                alt="Preview"
-                style={{ zIndex: 1, cursor: 'pointer' }}
-                onClick={(e) => { e.stopPropagation(); }}
-              />
+              <img className="upload-preview" src={imageUrl} alt="Preview" />
             ) : (
               <div className="upload-zone-text">
                 <span style={{ fontSize: '32px', display: 'block', marginBottom: '8px' }}>📷</span>
